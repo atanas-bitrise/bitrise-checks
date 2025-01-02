@@ -1,0 +1,102 @@
+---
+format_version: '13'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: other
+workflows:
+  primary:
+    steps:
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            echo "Hello World!"
+
+            ENV
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@8: {}
+    - deploy-to-bitrise-io@2: {}
+  rolling:
+    steps:
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            echo "Hello World!"
+
+            sleep 30
+    - set-env-var@0.9.1:
+        inputs:
+        - destination_keys: SHARD_NUMBER_1
+        - value: '1'
+    - set-env-var@0.9.1:
+        inputs:
+        - destination_keys: SHARD_NUMBER_2
+        - value: '2'
+    - build-router-start@0.14.6:
+        inputs:
+        - workflows: primary
+        - access_token: "$BITRISE_BUILD_TOKEN"
+        - environment_key_list: SHARD_NUMBER_1
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            echo "Hello World!"
+
+            sleep 20
+
+            envman add --key "BITRISEIO_GIT_BRANCH_DEST" --value "shard"
+    - build-router-start@0.14.6:
+        inputs:
+        - workflows: primary
+        - access_token: "$BITRISE_BUILD_TOKEN"
+        - environment_key_list: SHART_NUMBER_2
+    - script@1.2.1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            echo "Hello World!"
+
+            sleep 10
+meta:
+  bitrise.io:
+    stack: osx-xcode-16.0.x
+    machine_type_id: g2-m1.4core
+trigger_map:
+- push_branch: main
+  workflow: primary
+- pull_request_source_branch: "*"
+  workflow: primary
