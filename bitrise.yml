@@ -7,10 +7,6 @@ include:
     branch: include
     repository: Bitrise-iOS-Sample
 workflows:
-include:
-  - path: included2.yml
-    branch: include
-    repository: Bitrise-iOS-Sample
   primary:
     steps:
     - script@1.2.1:
