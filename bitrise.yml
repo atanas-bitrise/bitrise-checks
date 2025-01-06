@@ -5,10 +5,10 @@ project_type: other
 include:
   - path: included.yml
     branch: include
-    repository: https://github.com/atanas-bitrise/Bitrise-iOS-Sample.git
+    repository: Bitrise-iOS-Sample
   - path: included2.yml
     branch: include
-    repository: https://github.com/atanas-bitrise/Bitrise-iOS-Sample.git
+    repository: Bitrise-iOS-Sample
 workflows:
   primary:
     steps:
