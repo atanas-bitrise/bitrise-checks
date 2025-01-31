@@ -1,0 +1,12 @@
+format_version: 14
+
+app:
+  envs:
+  - CHECK: Check
+
+workflows:
+  test10:
+    steps:
+    - script:
+        inputs:
+        - content: echo "Hello Test 10"
