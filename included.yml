@@ -1,0 +1,18 @@
+format_version: 14
+
+app:
+  envs:
+  - CHECK: Check
+include:
+  - path: included.yml
+    branch: include
+    repository: https://github.com/atanas-bitrise/Bitrise-iOS-Sample.git
+  - path: included2.yml
+    branch: include
+    repository: https://github.com/atanas-bitrise/Bitrise-iOS-Sample.git
+workflows:
+  test10:
+    steps:
+    - script:
+        inputs:
+        - content: echo "Hello Test 10"

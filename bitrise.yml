@@ -2,6 +2,13 @@
 format_version: '13'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: other
+include:
+  - path: included.yml
+    branch: include
+    repository: Bitrise-iOS-Sample
+  - path: included2.yml
+    branch: include
+    repository: Bitrise-iOS-Sample
 workflows:
   primary:
     steps:
